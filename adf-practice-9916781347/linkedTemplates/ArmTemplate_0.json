@@ -663,7 +663,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "INSERT INTO dbo.ETL_TABLE_CONFIG\n(source_schema, source_table, target_schema, target_table)\nVALUES\n('STG', 'CUSTOMER', 'ODS', 'CUSTOMER'),\n('STG', 'LINEITEM', 'ODS', 'LINEITEM'),\n('STG', 'ORDERS', 'ODS', 'ORDERS'),\n('STG', 'PART', 'ODS', 'PART'),\n('STG', 'SUPPLIER', 'ODS', 'SUPPLIER');",
+								"sqlReaderQuery": "SELECT\n    source_schema,\n    source_table,\n    target_schema,\n    target_table\nFROM dbo.ETL_TABLE_CONFIG;",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
