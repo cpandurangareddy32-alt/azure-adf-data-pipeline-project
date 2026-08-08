@@ -19,7 +19,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation"
 			},
-			"columnDelimiter": ",",
+			"columnDelimiter": "|",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
