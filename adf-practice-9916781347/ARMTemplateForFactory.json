@@ -208,7 +208,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy data1",
+						"name": "STG_TO_ORS_customer_table",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -322,11 +322,12 @@
 						]
 					},
 					{
-						"name": "Copy data1_copy2",
+						"name": "STG_TO_ORS_PART_TABLE",
+						"description": "",
 						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "Copy data1",
+								"activity": "STG_TO_ORS_customer_table",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -384,11 +385,11 @@
 						]
 					},
 					{
-						"name": "Copy data1_copy3",
+						"name": "STG_TO_ODS_SUPPLIER_TABLE",
 						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "Copy data1_copy2",
+								"activity": "STG_TO_ORS_PART_TABLE",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -446,11 +447,11 @@
 						]
 					},
 					{
-						"name": "Copy data1_copy4",
+						"name": "STG_TO_ODS_LINEITEM",
 						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "Copy data1_copy3",
+								"activity": "STG_TO_ODS_SUPPLIER_TABLE",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -508,11 +509,11 @@
 						]
 					},
 					{
-						"name": "Copy data1_copy5",
+						"name": "STG_TO_ODS_NATION_REGION_TABLE",
 						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "Copy data1_copy4",
+								"activity": "STG_TO_ODS_LINEITEM",
 								"dependencyConditions": [
 									"Succeeded"
 								]
