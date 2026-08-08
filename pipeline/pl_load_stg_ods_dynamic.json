@@ -70,8 +70,10 @@
 								},
 								"sink": {
 									"type": "AzureSqlSink",
+									"preCopyScript": "DELETE FROM ODS.@{item().table_name};",
 									"writeBehavior": "insert",
-									"sqlWriterUseTableLock": false
+									"sqlWriterUseTableLock": false,
+									"disableMetricsCollection": false
 								},
 								"enableStaging": false,
 								"translator": {
@@ -86,13 +88,24 @@
 							"inputs": [
 								{
 									"referenceName": "ds_raw_table_cpandu",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"schema_name": "STG",
+										"table_name": "@item().table_name"
+									}
 								}
 							],
 							"outputs": [
 								{
 									"referenceName": "ds_raw_table_cpandu",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"schema_name": "ODS",
+										"table_name": {
+											"value": "@item().table_name",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
