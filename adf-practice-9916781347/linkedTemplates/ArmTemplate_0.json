@@ -188,7 +188,84 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"name": "[concat(parameters('factoryName'), '/pipeline3')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_source_file_cpandu",
+								"type": "DatasetReference",
+								"parameters": {
+									"src_dir": "source",
+									"file_nm": "orders"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_raw_table_cpandu",
+								"type": "DatasetReference",
+								"parameters": {
+									"schema_name": "STG",
+									"table_name": "orders"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_source_file_cpandu')]",
+				"[concat(variables('factoryId'), '/datasets/ds_raw_table_cpandu')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_load_blob_stg')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -353,13 +430,13 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pipeline2')]",
+			"name": "[concat(parameters('factoryName'), '/pl_load_stg_ods')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "STG_TO_ORS_customer_table",
+						"name": "STG_TO_ORS_CUSTOMER_TABLE",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -379,7 +456,6 @@
 							},
 							"sink": {
 								"type": "AzureSqlSink",
-								"preCopyScript": "delete from table ODS.customer",
 								"writeBehavior": "insert",
 								"sqlWriterUseTableLock": false,
 								"disableMetricsCollection": false
@@ -416,7 +492,7 @@
 						]
 					},
 					{
-						"name": "Copy data1_copy1",
+						"name": "STG_TO_ODS_ORDERS",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -478,7 +554,7 @@
 						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "STG_TO_ORS_customer_table",
+								"activity": "STG_TO_ORS_CUSTOMER_TABLE",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -732,14 +808,14 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pipeline3')]",
+			"name": "[concat(parameters('factoryName'), '/pl_load_stg_ods_dynamic')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy data1",
-						"type": "Copy",
+						"name": "Lookup1",
+						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -751,51 +827,104 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT table_name\nFROM dbo.ETL_TABLE_CONFIG;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
 							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_source_file_cpandu",
-								"type": "DatasetReference",
-								"parameters": {
-									"src_dir": "source",
-									"file_nm": "orders"
-								}
-							}
-						],
-						"outputs": [
-							{
+							"dataset": {
 								"referenceName": "ds_raw_table_cpandu",
 								"type": "DatasetReference",
 								"parameters": {
-									"schema_name": "STG",
-									"table_name": "orders"
+									"schema_name": "dbo",
+									"table_name": "dbo"
 								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
 							}
-						]
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup1').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy data1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "AzureSqlSource",
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "AzureSqlSink",
+											"preCopyScript": {
+												"value": "DELETE FROM ODS.@{item().table_name};",
+												"type": "Expression"
+											},
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false,
+											"disableMetricsCollection": false
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_raw_table_cpandu",
+											"type": "DatasetReference",
+											"parameters": {
+												"schema_name": "STG",
+												"table_name": "@item().table_name"
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_raw_table_cpandu",
+											"type": "DatasetReference",
+											"parameters": {
+												"schema_name": "ODS",
+												"table_name": {
+													"value": "@item().table_name",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
 					}
 				],
 				"policy": {
@@ -804,7 +933,6 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_source_file_cpandu')]",
 				"[concat(variables('factoryId'), '/datasets/ds_raw_table_cpandu')]"
 			]
 		}
