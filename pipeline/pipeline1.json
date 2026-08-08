@@ -92,7 +92,8 @@
 								"sink": {
 									"type": "AzureSqlSink",
 									"writeBehavior": "insert",
-									"sqlWriterUseTableLock": false
+									"sqlWriterUseTableLock": false,
+									"disableMetricsCollection": false
 								},
 								"enableStaging": false,
 								"translator": {
@@ -123,7 +124,17 @@
 							"outputs": [
 								{
 									"referenceName": "ds_raw_table_cpandu",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"schema_name": {
+											"value": "@pipeline().parameters.schemanameSTG",
+											"type": "Expression"
+										},
+										"table_name": {
+											"value": "@toUpper(split(item().name, '.')[0])",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
