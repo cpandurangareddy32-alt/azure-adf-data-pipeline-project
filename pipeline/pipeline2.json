@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "STG_TO_ORS_customer_table",
+				"name": "STG_TO_ORS_CUSTOMER_TABLE",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -60,7 +60,7 @@
 				]
 			},
 			{
-				"name": "Copy data1_copy1",
+				"name": "STG_TO_ODS_ORDERS",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -122,7 +122,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "STG_TO_ORS_customer_table",
+						"activity": "STG_TO_ORS_CUSTOMER_TABLE",
 						"dependencyConditions": [
 							"Succeeded"
 						]
