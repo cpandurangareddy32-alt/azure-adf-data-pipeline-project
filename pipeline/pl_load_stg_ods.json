@@ -1,5 +1,5 @@
 {
-	"name": "pipeline2",
+	"name": "pl_load_stg_ods",
 	"properties": {
 		"activities": [
 			{
@@ -23,7 +23,6 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "delete from table ODS.customer",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"disableMetricsCollection": false
