@@ -17,13 +17,20 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "s_source_folder_cpandu",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"src_dir": {
+								"value": "@pipeline().parameters.container",
+								"type": "Expression"
+							}
+						}
 					},
 					"fieldList": [
 						"childItems"
 					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -100,7 +107,17 @@
 							"inputs": [
 								{
 									"referenceName": "ds_source_file_cpandu",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"src_dir": {
+											"value": "@pipeline().parameters.container",
+											"type": "Expression"
+										},
+										"file_nm": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
 								}
 							],
 							"outputs": [
@@ -114,6 +131,14 @@
 				}
 			}
 		],
+		"parameters": {
+			"container": {
+				"type": "string"
+			},
+			"schemanameSTG": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }
