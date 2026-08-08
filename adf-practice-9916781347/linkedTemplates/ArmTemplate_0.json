@@ -208,6 +208,15 @@
 						"typeProperties": {
 							"source": {
 								"type": "DelimitedTextSource",
+								"additionalColumns": [
+									{
+										"name": "INSERT_DATE",
+										"value": {
+											"value": "@utcNow()",
+											"type": "Expression"
+										}
+									}
+								],
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
 									"recursive": true,
@@ -238,7 +247,7 @@
 								"type": "DatasetReference",
 								"parameters": {
 									"src_dir": "source",
-									"file_nm": "orders"
+									"file_nm": "orders.txt"
 								}
 							}
 						],
