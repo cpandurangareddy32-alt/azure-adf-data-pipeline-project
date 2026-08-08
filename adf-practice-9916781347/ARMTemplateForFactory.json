@@ -257,6 +257,30 @@
 								}
 							]
 						}
+					},
+					{
+						"name": "Execute pl_load_stg_ods_dynamic",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "ForEach1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_load_stg_ods_dynamic",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
 					}
 				],
 				"policy": {
@@ -274,6 +298,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/s_source_folder_cpandu')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_load_stg_ods_dynamic')]",
 				"[concat(variables('factoryId'), '/datasets/ds_source_file_cpandu')]",
 				"[concat(variables('factoryId'), '/datasets/ds_raw_table_cpandu')]"
 			]
@@ -730,10 +755,6 @@
 										},
 										"sink": {
 											"type": "AzureSqlSink",
-											"preCopyScript": {
-												"value": "DELETE FROM ODS.@{item().table_name};",
-												"type": "Expression"
-											},
 											"writeBehavior": "insert",
 											"sqlWriterUseTableLock": false,
 											"disableMetricsCollection": false
