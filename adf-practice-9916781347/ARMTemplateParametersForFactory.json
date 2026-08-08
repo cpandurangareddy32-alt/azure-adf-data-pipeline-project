@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-practice-9916781347"
+		},
+		"ls_source_container_accountKey": {
+			"value": ""
+		},
+		"ls_sql_db_password": {
+			"value": ""
+		},
+		"ls_source_container_properties_typeProperties_url": {
+			"value": "https://reddy6301.dfs.core.windows.net/"
+		},
+		"ls_sql_db_properties_typeProperties_server": {
+			"value": "cpandu-sqlserver.database.windows.net"
+		},
+		"ls_sql_db_properties_typeProperties_database": {
+			"value": "cpandu-db"
+		},
+		"ls_sql_db_properties_typeProperties_userName": {
+			"value": "azureadmin"
+		}
+	}
+}
