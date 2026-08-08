@@ -1,0 +1,30 @@
+{
+	"name": "s_source_folder_cpandu",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_source_container",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"src_dir": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": {
+					"value": "@dataset().src_dir",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": "|",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
