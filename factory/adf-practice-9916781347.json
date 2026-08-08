@@ -1,0 +1,10 @@
+{
+	"name": "adf-practice-9916781347",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "eastasia"
+}
