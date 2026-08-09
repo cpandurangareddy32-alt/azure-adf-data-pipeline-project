@@ -44,49 +44,41 @@
 							{
 								"source": {
 									"name": "NATIONKEY",
-									"type": "Int32",
-									"physicalType": "int"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "NATIONKEY",
-									"type": "Int32",
-									"physicalType": "int"
+									"type": "Int32"
 								}
 							},
 							{
 								"source": {
 									"name": "NAME",
-									"type": "String",
-									"physicalType": "varchar"
+									"type": "String"
 								},
 								"sink": {
 									"name": "NAME",
-									"type": "String",
-									"physicalType": "varchar"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
 									"name": "REGIONKEY",
-									"type": "Int32",
-									"physicalType": "int"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "REGIONKEY",
-									"type": "Int32",
-									"physicalType": "int"
+									"type": "Int32"
 								}
 							},
 							{
 								"source": {
 									"name": "REGION_NAME",
-									"type": "String",
-									"physicalType": "varchar"
+									"type": "String"
 								},
 								"sink": {
 									"name": "REGION_NAME",
-									"type": "String",
-									"physicalType": "varchar"
+									"type": "String"
 								}
 							},
 							{
@@ -96,24 +88,12 @@
 								},
 								"sink": {
 									"name": "INSERT_DATE",
-									"type": "DateTime",
-									"physicalType": "datetime"
+									"type": "DateTime"
 								}
 							}
-						],
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
+						]
 					}
 				},
-				"inputs": [
-					{
-						"referenceName": "fake",
-						"type": "DatasetReference"
-					}
-				],
 				"outputs": [
 					{
 						"referenceName": "ds_raw_table_cpandu",
